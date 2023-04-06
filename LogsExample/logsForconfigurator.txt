@@ -1,0 +1,94 @@
+# Set the root logger level to INFO and its only appender to the console
+log4j.rootLogger=INFO, file [if we need print on console use "console" instead of file]
+
+# Configure the console appender
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.Target=System.out
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Configure the rolling file appender
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+log4j.appender.file.File=/path/to/log/file.log
+log4j.appender.file.MaxFileSize=10MB
+log4j.appender.file.MaxBackupIndex=5
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Set the logging level for specific packages
+log4j.logger.com.example=DEBUG
+log4j.logger.org.apache=INFO
+
+# Ignore certain log messages
+log4j.logger.com.example.ignored=OFF
+
+# Add a custom appender
+log4j.appender.email=org.apache.log4j.net.SMTPAppender
+log4j.appender.email.SMTPHost=smtp.example.com
+log4j.appender.email.To=you@example.com
+log4j.appender.email.From=me@example.com
+log4j.appender.email.Subject=Log message from MyApp
+log4j.appender.email.layout=org.apache.log4j.PatternLayout
+log4j.appender.email.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+log4j.logger.com.example.email=INFO, email
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- Define the root logger with console and file appenders -->
+  <root>
+    <priority value="INFO" />
+    <appender-ref ref="console" />
+    <appender-ref ref="file" />
+  </root>
+
+  <!-- Console appender configuration -->
+  <appender name="console" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+    </layout>
+  </appender>
+
+  <!-- File appender configuration -->
+  <appender name="file" class="org.apache.log4j.RollingFileAppender">
+    <param name="File" value="/path/to/log/file.log" />
+    <param name="MaxFileSize" value="10MB" />
+    <param name="MaxBackupIndex" value="5" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+    </layout>
+  </appender>
+
+  <!-- Logger configuration -->
+  <logger name="com.example">
+    <level value="DEBUG" />
+  </logger>
+
+  <logger name="org.apache">
+    <level value="INFO" />
+  </logger>
+
+  <!-- Additivity configuration -->
+  <logger name="com.example.email" additivity="false">
+    <level value="INFO" />
+    <appender-ref ref="email" />
+  </logger>
+
+  <!-- Custom appender configuration -->
+  <appender name="email" class="org.apache.log4j.net.SMTPAppender">
+    <param name="SMTPHost" value="smtp.example.com" />
+    <param name="To" value="you@example.com" />
+    <param name="From" value="me@example.com" />
+    <param name="Subject" value="Log message from MyApp" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+    </layout>
+  </appender>
+
+</log4j:configuration>
+
